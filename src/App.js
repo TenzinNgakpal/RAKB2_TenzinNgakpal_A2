@@ -1,84 +1,86 @@
-import React, {useState} from 'react';
-import ReactDOM from 'react-dom';
-import './App.css';
- 
+import React, { useState } from "react";
+import "./App.css";
+
 function App() {
-    const [name , setName] = useState('');
-    const [age , setAge] = useState('');
-    const [email , setEmail] = useState('');
-    const [password , setPassword] = useState('');
-    const [confPassword , setConfPassword] = useState('');
- 
-    const handleChange =(e)=>{
-      setName(e.target.value);
-    }
+  // React States
+  const [errorMessages, setErrorMessages] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-    const handleAgeChange =(e)=>{
-      setAge(e.target.value);
+  // User Login info
+  const database = [
+    {
+      username: "Tenzin",
+      password: "Mark13"
+    },
+    {
+      username: "Ngakpal",
+      password: "Nihil13"
     }
+  ];
 
-    const handleEmailChange =(e)=>{
-      setEmail(e.target.value);
-    }
+  const errors = {
+    uname: "invalid username",
+    pass: "invalid password"
+  };
 
-    const handlePasswordChange =(e)=>{
-      setPassword(e.target.value);
-    }
+  const handleSubmit = (event) => {
+    //Prevent page reload
+    event.preventDefault();
 
-    const handleConfPasswordChange =(e)=>{
-      setConfPassword(e.target.value);
-    }
+    var { uname, pass } = document.forms[0];
 
-    const handleSubmit=(e)=>{
-      if(password!==confPassword)
-      {
-        alert("password Not Match");
+    // Find user login info
+    const userData = database.find((user) => user.username === uname.value);
+
+    // Compare user info
+    if (userData) {
+      if (userData.password !== pass.value) {
+        // Invalid password
+        setErrorMessages({ name: "pass", message: errors.pass });
+      } else {
+        setIsSubmitted(true);
       }
-      else{
-        alert('A form was submitted with Name :"' + name +
-        '" ,Age :"'+age +'" and Email :"' + email + '"');
-      }
-      e.preventDefault(); 
+    } else {
+      // Username not found
+      setErrorMessages({ name: "uname", message: errors.uname });
     }
+  };
+
+  // Generate JSX code for error message
+  const renderErrorMessage = (name) =>
+    name === errorMessages.name && (
+      <div className="error">{errorMessages.message}</div>
+    );
+
+  // JSX code for login form
+  const renderForm = (
+    <div className="form">
+      <form onSubmit={handleSubmit}>
+        <div className="input-container">
+          <label>Username </label>
+          <input type="text" name="uname" required />
+          {renderErrorMessage("uname")}
+        </div>
+        <div className="input-container">
+          <label>Password </label>
+          <input type="password" name="pass" required />
+          {renderErrorMessage("pass")}
+        </div>
+        <div className="button-container">
+          <input type="submit" />
+        </div>
+      </form>
+    </div>
+  );
 
   return (
-    <div className="App">
-    <header className="App-header">
-    <form onSubmit={(e) => {handleSubmit(e)}}>
-
-    <h2> Geeks For Geeks </h2>
-    <h3> Sign-up Form </h3>
-    <img src="./Banner.jpg" alt='Logo'/>
-        <label >
-          Name:
-        </label><br/>
-        <input type="text" value={name} required onChange={(e) => {handleChange(e)}} /><br/>
-
-        <label >
-          Age:
-        </label><br/>
-        <input type="text" value={age} required onChange={(e) => {handleAgeChange(e)}} /><br/>
-
-        <label>
-          Email:
-        </label><br/>
-        <input type="email" value={email} required onChange={(e) => {handleEmailChange(e)}} /><br/>
-
-        <label>
-          Password:
-        </label><br/>
-        <input type="password" value={password} required onChange={(e) => {handlePasswordChange(e)}} /><br/>
-
-        <label>
-          Confirm Password:
-        </label><br/>
-        <input type="password" value={confPassword} required onChange={(e) => {handleConfPasswordChange(e)}} /><br/>
-
-        <input type="submit" value="Submit"/>
-      </form>
-    </header>
+    <div className="app">
+      <div className="login-form">
+        <div className="title">Sign In</div>
+        {isSubmitted ? <div>User is successfully logged in</div> : renderForm}
+      </div>
     </div>
   );
 }
- 
+
 export default App;
