@@ -1,35 +1,19 @@
-import React, { Component, useState } from 'react'
-
-export function Form1(){
- 
-        
-    const [username, setusername] = useState('');
-    const [password, setpassword] = useState('');
-    
-     const submitform = (e) =>{
-        e.preventDefault();
-        if(username.toLowerCase()=="Tenzin" && password.toLowerCase()=="Ngakpal"){
-            alert('Valid Username and Password');
-        }
-        else{
-            alert('Invalid Username or password');
-        }
-   }
-    
-   
-  
-        return (
-            <div>
-                <form onSubmit={submitform}>
-                    <label htmlFor="username">Enter User Name</label>
-                   <input type="text" id="username" value={username} onChange={(e)=>setusername(e.target.value)} />
-                   <label htmlFor="password">Password</label>
-                   <input type="password" id="password" value={password} onChange={(e)=>setpassword(e.target.value)} />
-                   <input type="submit" value="Save" />
-                </form>
-            </div>
-        )
-    
-}
-
-export default Form1
+const renderForm = (
+    <div className="form">
+      <form>
+        <div className="input-container">
+          <label>Username </label>
+          <input type="text" name="uname" required />
+          {renderErrorMessage("uname")}
+        </div>
+        <div className="input-container">
+          <label>Password </label>
+          <input type="password" name="pass" required />
+          {renderErrorMessage("pass")}
+        </div>
+        <div className="button-container">
+          <input type="submit" />
+        </div>
+      </form>
+    </div>
+ );
